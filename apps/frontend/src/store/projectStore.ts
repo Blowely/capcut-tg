@@ -7,6 +7,7 @@ export interface Project {
   description?: string
   videoIds: string[]
   settings?: any
+  thumbnail?: string
   createdAt: number
   updatedAt: number
 }
