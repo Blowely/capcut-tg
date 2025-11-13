@@ -1,6 +1,8 @@
 import { create } from 'zustand'
 import { getAllProjects, createProject as createProjectDB, updateProject as updateProjectDB, deleteProject as deleteProjectDB } from '@/lib/videoStorage'
 
+export type ProjectStatus = 'DRAFT' | 'PROCESSING' | 'COMPLETED' | 'FAILED'
+
 export interface Project {
   id: string
   title: string
@@ -8,6 +10,7 @@ export interface Project {
   videoIds: string[]
   settings?: any
   thumbnail?: string
+  status?: ProjectStatus
   createdAt: number
   updatedAt: number
 }

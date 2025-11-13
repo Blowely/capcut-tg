@@ -42,11 +42,13 @@ export function ProjectCard({ project, onOpen, onDelete }: ProjectCardProps) {
         ) : (
           <Video size={48} className="text-gray-600" />
         )}
-        <div
-          className={`absolute top-2 right-2 ${statusColors[project.status]} text-white text-xs px-2 py-1 rounded`}
-        >
-          {statusLabels[project.status]}
-        </div>
+        {project.status && (
+          <div
+            className={`absolute top-2 right-2 ${statusColors[project.status]} text-white text-xs px-2 py-1 rounded`}
+          >
+            {statusLabels[project.status]}
+          </div>
+        )}
       </div>
 
       <div className="p-4">

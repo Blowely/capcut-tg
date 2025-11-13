@@ -10,6 +10,8 @@ interface VideoFile {
   thumbnail?: string
 }
 
+type ProjectStatus = 'DRAFT' | 'PROCESSING' | 'COMPLETED' | 'FAILED'
+
 interface Project {
   id: string
   title: string
@@ -17,6 +19,7 @@ interface Project {
   videoIds: string[]
   settings?: any
   thumbnail?: string
+  status?: ProjectStatus
   createdAt: number
   updatedAt: number
 }
@@ -123,6 +126,7 @@ export async function createProject(title: string, description?: string): Promis
     title,
     description,
     videoIds: [],
+    status: 'DRAFT',
     createdAt: Date.now(),
     updatedAt: Date.now(),
   }
