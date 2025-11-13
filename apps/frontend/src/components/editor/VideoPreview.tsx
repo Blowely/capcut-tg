@@ -33,29 +33,27 @@ export function VideoPreview({
     }
 
     if (isPlaying) {
-      console.log('▶️ Воспроизведение с позиции:', currentTime)
-      // Синхронизируем время перед воспроизведением
+      console.log('▶️ Воспроизведение с позиции маркера:', currentTime)
+      // КРИТИЧЕСКИ ВАЖНО: синхронизируем время с маркером перед воспроизведением
       videoRef.current.currentTime = currentTime
       videoRef.current.play().catch((err) => {
         console.error('❌ Ошибка воспроизведения:', err)
       })
     } else {
-      console.log('⏸️ Пауза')
+      console.log('⏸️ Пауза на позиции:', currentTime)
       videoRef.current.pause()
-    }
-  }, [isPlaying, videoUrl, currentTime])
-
-  // Синхронизация кадра видео с текущим временем (для scrubbing)
-  useEffect(() => {
-    if (!videoRef.current || !videoUrl) return
-    
-    // Всегда синхронизируем кадр с timeline
-    const timeDiff = Math.abs(videoRef.current.currentTime - currentTime)
-    
-    // Обновляем если разница больше 0.1 секунды или видео на паузе
-    if (timeDiff > 0.1 || !isPlaying) {
+      // При паузе тоже синхронизируем время
       videoRef.current.currentTime = currentTime
     }
+  }, [isPlaying, videoUrl])
+
+  // Синхронизация кадра видео с текущим временем (для scrubbing по дорожке)
+  useEffect(() => {
+    if (!videoRef.current || !videoUrl || isPlaying) return
+    
+    // Только когда на паузе - синхронизируем с маркером
+    console.log(`🎞️ Синхронизация с маркером: ${currentTime.toFixed(2)}s`)
+    videoRef.current.currentTime = currentTime
   }, [currentTime, videoUrl, isPlaying])
 
   return (

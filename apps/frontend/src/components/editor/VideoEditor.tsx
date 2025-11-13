@@ -89,16 +89,16 @@ export function VideoEditor({ projectId }: VideoEditorProps) {
           </div>
 
           {/* Toolbar - 25% */}
-          <div className="py-1" style={{ height: '25%' }}>
+          <div className="py-2" style={{ height: '25%' }}>
             <Toolbar 
               selectedTool={selectedTool}
               onSelectTool={setSelectedTool}
             />
           </div>
-          
-          {/* Safe zone внизу */}
-          <div className="h-6 bg-black" />
         </div>
+        
+        {/* Safe zone внизу - вне контейнера */}
+        <div className="fixed bottom-0 left-0 right-0 h-4 bg-black pointer-events-none z-50" />
       </div>
       
       {/* Properties Panel как Bottom Sheet */}

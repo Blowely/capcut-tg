@@ -29,9 +29,9 @@ export function Timeline({
   const [initialPinchDistance, setInitialPinchDistance] = useState<number | null>(null)
   const [initialScale, setInitialScale] = useState(100)
 
-  // Генерация превью для видео - много кадров для плавности
+  // Генерация превью для видео
   const generateThumbnails = (duration: number) => {
-    const thumbnailCount = Math.ceil(duration * 10) // 10 превью в секунду для плавности
+    const thumbnailCount = Math.ceil(duration * 5) // 5 превью в секунду - баланс плавности и производительности
     return Array.from({ length: thumbnailCount }, (_, i) => i)
   }
 
@@ -153,13 +153,13 @@ export function Timeline({
                 {/* Thumbnails Grid - показываем preview видео */}
                 <div className="flex h-full">
                   {generateThumbnails(duration).map((i) => {
-                    const thumbnailTime = (i / 10) // Время для этого thumbnail (10 кадров в секунду)
+                    const thumbnailTime = (i / 5) // Время для этого thumbnail (5 кадров в секунду)
                     return (
                       <div
                         key={i}
                         className="flex-shrink-0 bg-gray-900 border-r border-gray-700 overflow-hidden relative"
                         style={{ 
-                          width: `${scale / 10}px`
+                          width: `${scale / 5}px`
                         }}
                       >
                         {videoUrl && (

@@ -33,7 +33,7 @@ services:
       UPLOAD_DIR: /app/uploads
       TEMP_DIR: /app/temp
     ports:
-      - '3001:3001'
+      - '3010:3001'
     volumes:
       - ./apps/backend/uploads:/app/uploads
       - ./apps/backend/temp:/app/temp
@@ -50,9 +50,11 @@ services:
       dockerfile: Dockerfile
     container_name: capcut-frontend-prod
     environment:
-      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:3001}
+      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-https://capcut.vividusgo.ru/api}
+      NEXT_PUBLIC_SOCKET_URL: ${NEXT_PUBLIC_SOCKET_URL:-https://capcut.vividusgo.ru}
+      BACKEND_URL: http://backend:3001
     ports:
-      - '3000:3000'
+      - '3011:3000'
     depends_on:
       - backend
     networks:
