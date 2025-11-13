@@ -1,0 +1,70 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: capcut-postgres-prod
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-capcut}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-capcut123}
+      POSTGRES_DB: ${POSTGRES_DB:-capcut_db}
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres_data_prod:/var/lib/postgresql/data
+    networks:
+      - capcut-network
+    restart: unless-stopped
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U capcut']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./apps/backend
+      dockerfile: Dockerfile
+    container_name: capcut-backend-prod
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-capcut}:${POSTGRES_PASSWORD:-capcut123}@postgres:5432/${POSTGRES_DB:-capcut_db}?schema=public
+      PORT: 3001
+      TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN}
+      UPLOAD_DIR: /app/uploads
+      TEMP_DIR: /app/temp
+    ports:
+      - '3001:3001'
+    volumes:
+      - ./apps/backend/uploads:/app/uploads
+      - ./apps/backend/temp:/app/temp
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - capcut-network
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./apps/frontend
+      dockerfile: Dockerfile
+    container_name: capcut-frontend-prod
+    environment:
+      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:3001}
+    ports:
+      - '3000:3000'
+    depends_on:
+      - backend
+    networks:
+      - capcut-network
+    restart: unless-stopped
+
+networks:
+  capcut-network:
+    driver: bridge
+
+volumes:
+  postgres_data_prod:
+
+
+
