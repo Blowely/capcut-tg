@@ -7,6 +7,13 @@ let ffmpeg: FFmpeg | null = null
 let isLoading = false
 let isLoaded = false
 
+// Хелпер для преобразования FileData в BlobPart
+function convertFileDataToBlobPart(data: any): BlobPart {
+  if (data instanceof Uint8Array) return data as BlobPart
+  if (data instanceof ArrayBuffer) return data
+  return new TextEncoder().encode(String(data))
+}
+
 export async function loadFFmpeg(): Promise<FFmpeg> {
   if (ffmpeg && isLoaded) {
     return ffmpeg
@@ -87,7 +94,7 @@ export async function trimVideo(
 
     // Читаем результат
     const data = await ffmpeg.readFile(outputName)
-    const blob = new Blob([data], { type: 'video/mp4' })
+    const blob = new Blob([convertFileDataToBlobPart(data)], { type: 'video/mp4' })
 
     // Очищаем
     await ffmpeg.deleteFile(inputName)
@@ -138,8 +145,8 @@ export async function splitVideo(
     const data1 = await ffmpeg.readFile(output1Name)
     const data2 = await ffmpeg.readFile(output2Name)
     
-    const part1 = new Blob([data1], { type: 'video/mp4' })
-    const part2 = new Blob([data2], { type: 'video/mp4' })
+    const part1 = new Blob([convertFileDataToBlobPart(data1)], { type: 'video/mp4' })
+    const part2 = new Blob([convertFileDataToBlobPart(data2)], { type: 'video/mp4' })
 
     // Очищаем
     await ffmpeg.deleteFile(inputName)
@@ -188,7 +195,7 @@ export async function mergeVideos(
 
     // Читаем результат
     const data = await ffmpeg.readFile(outputName)
-    const blob = new Blob([data], { type: 'video/mp4' })
+    const blob = new Blob([convertFileDataToBlobPart(data)], { type: 'video/mp4' })
 
     // Очищаем
     for (const inputName of inputNames) {
