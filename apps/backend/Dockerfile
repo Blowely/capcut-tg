@@ -1,8 +1,8 @@
 FROM node:18-alpine AS base
 
-# Установка FFmpeg
+# Установка FFmpeg и OpenSSL (нужен для Prisma)
 RUN apk update --no-cache && \
-    apk add --no-cache ffmpeg
+    apk add --no-cache ffmpeg openssl1.1-compat libc6-compat
 
 # Установка зависимостей
 FROM base AS deps
