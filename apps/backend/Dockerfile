@@ -43,7 +43,8 @@ RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nestjs
 
 # Копируем только необходимые файлы
-COPY --from=deps --chown=nestjs:nodejs /app/node_modules ./node_modules
+# Копируем node_modules из builder, где prisma generate уже выполнен
+COPY --from=builder --chown=nestjs:nodejs /app/node_modules ./node_modules
 COPY --from=builder --chown=nestjs:nodejs /app/apps/backend/dist ./dist
 COPY --from=builder --chown=nestjs:nodejs /app/apps/backend/prisma ./prisma
 COPY --from=builder --chown=nestjs:nodejs /app/apps/backend/package.json ./package.json
