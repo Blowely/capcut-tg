@@ -74,9 +74,9 @@ export function VideoEditor({ projectId }: VideoEditorProps) {
         </div>
 
         {/* Timeline + Toolbar - 40% экрана */}
-        <div className="bg-black border-t border-gray-800 overflow-hidden" style={{ height: '40%' }}>
+        <div className="bg-black border-t border-gray-800 overflow-hidden flex flex-col" style={{ height: '40%' }}>
           {/* Timeline - 75% */}
-          <div className="overflow-hidden" style={{ height: '75%' }}>
+          <div className="flex-1 min-h-0" style={{ height: '75%' }}>
             <Timeline 
               currentTime={currentTime}
               duration={duration}
